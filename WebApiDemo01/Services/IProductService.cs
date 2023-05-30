@@ -5,10 +5,10 @@ namespace WebApiDemo01.Services
 {
     public interface IProductService
     {
-        List<Product> GetAllProducts();
-        Product GetProduct(int id);
-        List<Product> AddProduct(Product product);
-        List<Product> UpdateProduct(Product request);
-        List<Product> DeleteProduct(int id);
+        Task<List<Product>> GetAllProducts();
+        Task<Product> GetProduct(int id);
+        Task<List<Product>> AddProduct(Product product);
+        Task<List<Product>> UpdateProduct(int id,Product request);
+        Task<List<Product>> DeleteProduct(int id);
     }
 }

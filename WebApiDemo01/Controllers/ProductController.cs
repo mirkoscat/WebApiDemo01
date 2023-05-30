@@ -17,8 +17,12 @@ namespace WebApiDemo01.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetAllProducts()
         {
-
-            return Ok(_productService.GetAllProducts());
+            var products=await _productService.GetAllProducts();
+            if (products == null)
+            {
+                return NotFound("Product not found");
+            }
+            return Ok(products);
 
         }
 
@@ -26,33 +30,45 @@ namespace WebApiDemo01.Controllers
 
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-           
-            return Ok(_productService.GetProduct(id));
+            var product = await _productService.GetProduct(id);
+            if(product == null)
+            {
+                return NotFound("Product not found");
+            }
+            return Ok(product);
 
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Product>>> AddProduct(Product product)
         {
-            
-            return Ok(_productService.AddProduct(product));
+            var result= await _productService.AddProduct(product);
+            if(result==null)
+            {
+                return NotFound("Product not found");
+            }
+            return Ok(result);
 
         }
 
         [HttpPut]
 
-        public async Task<ActionResult<List<Product>>> UpdateProduct(Product request)
+        public async Task<ActionResult<List<Product>>> UpdateProduct(int id,Product request)
         {
             
-            return Ok(_productService.UpdateProduct(request));
-
+            var result = await _productService.UpdateProduct(id, request);
+            if (result == null)
+                return NotFound("Product not found");
+            return Ok(result);
         }
 
         [HttpDelete]
         public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
         {
-            
-            return Ok(_productService.DeleteProduct(id));
+            var result= await _productService.DeleteProduct(id);
+            if (result == null)
+                return NotFound("Product not found");
+            return Ok(result);
 
         }
 

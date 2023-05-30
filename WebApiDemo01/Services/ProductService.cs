@@ -1,47 +1,54 @@
-﻿using WebApiDemo01.Models;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
+using WebApiDemo01.Data;
+using WebApiDemo01.Models;
 
 namespace WebApiDemo01.Services
 {
     public class ProductService : IProductService
     {
-        private static List<Product> products = new List<Product> {
-            new Product{ Id=1, ProductName="product 1", ProductCategory = (Enums.ProductCategory)1,ProductDescription="Description 1" ,ProductPrice=20.00m,ProductStock=300},
-            new Product{ Id=2, ProductName="product 2", ProductCategory = (Enums.ProductCategory)2,ProductDescription="Description 2" ,ProductPrice=12.99m,ProductStock=200},
-            new Product{ Id = 3, ProductName = "product 3", ProductCategory = (Enums.ProductCategory)3, ProductDescription = "Description 3", ProductPrice = 9.5m, ProductStock = 150 },
-            new Product{ Id = 4, ProductName = "product 4", ProductCategory = (Enums.ProductCategory)1, ProductDescription = "Description 4", ProductPrice = 5.99m, ProductStock = 200 }
-
-            };
-        public List<Product> AddProduct(Product product)
+        private readonly DataContext _context;
+        public ProductService(DataContext context)
         {
-            products.Add(product);
-            return products;
-
+            _context = context;
         }
-
-        public List<Product> DeleteProduct(int id)
+     
+        public async Task<List<Product>> AddProduct(Product product)
         {
-            var product = products.Find(x => x.Id == id);
-            products.Remove(product);
-            return products;
-
-        }
-
-        public List<Product> GetAllProducts()
-        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            var products = await _context.Products.ToListAsync();
             return products;
         }
 
-        public Product GetProduct(int id)
+        public async Task<List<Product>> DeleteProduct(int id)
         {
-            var product = products.Find(x => x.Id == id);
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+                return null;
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            var products = await _context.Products.ToListAsync();
+            return products;
+        }
+
+        public async Task<List<Product>> GetAllProducts()
+        {
+            var products = await _context.Products.ToListAsync();
+            return products;
+        }
+
+        public async Task<Product> GetProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
                 return null;
             return product;
         }
 
-        public List<Product> UpdateProduct(Product request)
+        public async Task<List<Product>> UpdateProduct(int id,Product request)
         {
-            var product = products.Find(x => x.Id == request.Id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
                 return null;
 
@@ -50,7 +57,9 @@ namespace WebApiDemo01.Services
             product.ProductDescription = request.ProductDescription;
             product.ProductPrice = request.ProductPrice;
             product.ProductStock = request.ProductStock;
+            await _context.SaveChangesAsync();
 
+            var products = await _context.Products.ToListAsync();
             return products;
         }
     }

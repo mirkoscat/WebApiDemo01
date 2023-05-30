@@ -24,12 +24,50 @@ namespace WebApiDemo01.Controllers
         }
 
         [HttpGet("{id}")]
-        
+
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = products.Find(x => x.Id == id);
+            if (product == null)
+                return NotFound("This product does not exist.");
             return Ok(product);
 
         }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Product>>> AddProduct(Product product)
+        {
+            products.Add(product);
+            return Ok(products);
+
+        }
+
+        [HttpPut]
+
+        public async Task<ActionResult<List<Product>>> UpdateProduct(Product request)
+        {
+            var product = products.Find(x => x.Id == request.Id);
+            if (product == null)
+                return NotFound("This product does not exist.");
+
+            product.ProductName = request.ProductName;
+            product.ProductCategory = request.ProductCategory;
+            product.ProductDescription = request.ProductDescription;
+            product.ProductPrice = request.ProductPrice;
+            product.ProductStock = request.ProductStock;
+            
+            return Ok(product);
+
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
+        {
+            var product = products.Find(x => x.Id == id);
+            products.Remove(product);
+            return Ok(products);
+
+        }
+
     }
 }

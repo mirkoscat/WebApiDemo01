@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiDemo01", "WebApiDemo01\WebApiDemo01.csproj", "{399D70B0-8242-4B0D-AC45-17CB7F2B1490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiDemo01", "WebApiDemo01\WebApiDemo01.csproj", "{399D70B0-8242-4B0D-AC45-17CB7F2B1490}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLayer", "WebLayer\WebLayer.csproj", "{05B2675F-197F-41A8-B643-A347E75E6ED9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{399D70B0-8242-4B0D-AC45-17CB7F2B1490}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{399D70B0-8242-4B0D-AC45-17CB7F2B1490}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{399D70B0-8242-4B0D-AC45-17CB7F2B1490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05B2675F-197F-41A8-B643-A347E75E6ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05B2675F-197F-41A8-B643-A347E75E6ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05B2675F-197F-41A8-B643-A347E75E6ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05B2675F-197F-41A8-B643-A347E75E6ED9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

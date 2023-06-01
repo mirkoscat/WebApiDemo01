@@ -1,0 +1,64 @@
+﻿@model WebLayer.Models.EditProductViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>EditProductViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="editForm" asp-action="Edit" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*
+            Bindare ID     
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="@Model.ProductName" class="control-label"></label>
+                <input asp-for="@Model.ProductName" class="form-control" />
+                <span asp-validation-for="@Model.ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ProductDescription" class="control-label"></label>
+                <input asp-for="@Model.ProductDescription" class="form-control" />
+                <span asp-validation-for="@Model.ProductDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ProductPrice" class="control-label"></label>
+                <input asp-for="@Model.ProductPrice" class="form-control" />
+                <span asp-validation-for="@Model.ProductPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ProductCategory" class="control-label"></label>
+                <input asp-for="@Model.ProductCategory" class="form-control" />
+                <span asp-validation-for="@Model.ProductCategory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ProductStock" class="control-label"></label>
+                <input asp-for="@Model.ProductStock" class="form-control" />
+                <span asp-validation-for="@Model.ProductStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="_method" value="PUT" />
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+ 
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

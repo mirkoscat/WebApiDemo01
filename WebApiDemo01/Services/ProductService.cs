@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using System.Reflection.Metadata.Ecma335;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using WebApiDemo01.Data;
 using WebApiDemo01.Models;
@@ -33,19 +34,11 @@ namespace WebApiDemo01.Services
             return products;
         }
 
-        public async Task<List<Product>> GetAllProducts()
-        {
-            var products = await _context.Products.ToListAsync();
-            return products;
-        }
+        public async Task<List<Product>> GetAllProducts() => await _context.Products.ToListAsync();
 
-        public async Task<Product> GetProduct(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                return null;
-            return product;
-        }
+
+        public async Task<Product> GetProduct(int id) => await _context.Products.FindAsync(id);
+        
 
         public async Task<List<Product>> UpdateProduct(int id,Product request)
         {

@@ -51,7 +51,7 @@ namespace WebApiDemo01.Controllers
 
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
 
         public async Task<ActionResult<List<Product>>> UpdateProduct(int id,Product request)
         {
@@ -62,7 +62,7 @@ namespace WebApiDemo01.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
         {
             var result= await _productService.DeleteProduct(id);

@@ -3,21 +3,27 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WebApiDemo01.Models;
 using WebApiDemo01.Services;
 using WebLayer.Models;
 
+
 namespace WebLayer.Controllers
 {
-    [Controller]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
-        private readonly string url = "https://localhost:7015/api/Product";
+        private readonly string url = "https://localhost:7015/api/Product/";
+
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -82,16 +88,18 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> Edit(int id)
         {
 
-            var getProductUrl = $"{url}/{id}";
+            var getProductUrl = $"{url}{id}";
 
             using (HttpResponseMessage getProductResponse = await _httpClient.GetAsync(getProductUrl))
             {
                 if (getProductResponse.IsSuccessStatusCode)
                 {
                     var currentProductJson = await getProductResponse.Content.ReadAsStringAsync();
+                   
                     var currentProduct = JsonConvert.DeserializeObject<CreateProductViewModel>(currentProductJson);
+
                     var model = new EditProductViewModel()
-                    {   Id = id,
+                    {
                         ProductName = currentProduct.ProductName,
                         ProductDescription = currentProduct.ProductDescription,
                         ProductCategory = currentProduct.ProductCategory,
@@ -108,12 +116,65 @@ namespace WebLayer.Controllers
                 }
             }
         }
-       
-        [HttpDelete("{id}")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, CreateProductViewModel createProductViewModel)
+        {
 
+            var getProductUrl = $"{url}{id}";
+
+
+            using (HttpResponseMessage getProductResponse = await _httpClient.GetAsync(getProductUrl))
+            {
+                if (getProductResponse.IsSuccessStatusCode)
+                {
+                    var currentProductJson = await getProductResponse.Content.ReadAsStringAsync();
+                    var currentProduct = JObject.Parse(currentProductJson);
+
+                    if (currentProduct != null)
+                    {
+                        currentProduct["productName"] = createProductViewModel.ProductName;
+                        currentProduct["productDescription"] = createProductViewModel.ProductDescription;
+                        currentProduct["productPrice"] = createProductViewModel.ProductPrice;
+                        currentProduct["productCategory"] = createProductViewModel.ProductCategory.ToString();
+                        currentProduct["ProductStock"] = createProductViewModel.ProductStock;
+
+                        var updatedProductJson = currentProduct.ToString();
+
+                        var content = new StringContent(updatedProductJson, Encoding.UTF8, "application/json");
+
+                        using (HttpResponseMessage updateProductResponse = await _httpClient.PutAsync(url + id, content))
+                        {
+                            if (updateProductResponse.IsSuccessStatusCode)
+                            {
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Errore nella richiesta: {updateProductResponse.StatusCode}");
+                                return View(currentProduct);
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Prodotto non trovato");
+                        return View();
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine($"Errore nella richiesta: {getProductResponse.StatusCode}");
+                    return View();
+                }
+            }
+        }
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleteProductUrl = $"{url}/{id}";
+            var deleteProductUrl = $"{url}{id}";
 
             using (HttpResponseMessage response = await _httpClient.DeleteAsync(deleteProductUrl))
             {
